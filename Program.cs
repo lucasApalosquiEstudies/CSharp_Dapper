@@ -5,9 +5,29 @@ using Microsoft.Data.SqlClient;
 const string connectionString = "Server=DESKTOP-BVKU5HC;Database=balta;Trusted_Connection=True;TrustServerCertificate=True";
 
 
-Category category = new Category("Amazon AWS", "Amazon", "Categoria destinada a serviços AWS", 8, "AWS Cloud", false);
 
-var insertSql = @"INSERT INTO 
+
+
+using (var connection = new SqlConnection(connectionString))
+{
+    ListCategories(connection);
+
+}
+
+static void ListCategories(SqlConnection connection)
+{
+    var categories = connection.Query<Category>("SELECT [Id], [Title] Title FROM [Category]");
+    foreach (var item in categories)
+    {
+        Console.WriteLine(item.Id + ", " + item.Title);
+    }
+}
+
+static void CreateCategory(SqlConnection connection)
+{
+    Category category = new Category("Amazon AWS", "Amazon", "Categoria destinada a serviços AWS", 8, "AWS Cloud", false);
+
+    var insertSql = @"INSERT INTO 
     [Category] 
         VALUES(
             @Id, 
@@ -18,11 +38,6 @@ var insertSql = @"INSERT INTO
             @Description, 
             @Featured)";
 
-
-
-
-using (var connection = new SqlConnection(connectionString))
-{
     var rows = connection.Execute(insertSql, new
     {
         category.Id,
@@ -34,13 +49,6 @@ using (var connection = new SqlConnection(connectionString))
         category.Featured
     });
     Console.WriteLine($"{rows} linhas inseridas;");
-
-    var categories = connection.Query<Category>("SELECT [Id], [Title] Title FROM [Category]");
-    foreach (var item in categories)
-    {
-       Console.WriteLine(item.Id + ", " + item.Title);
-    }
-    
 }
 
 
