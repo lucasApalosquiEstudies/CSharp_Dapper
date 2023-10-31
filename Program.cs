@@ -11,7 +11,8 @@ const string connectionString = "Server=DESKTOP-BVKU5HC;Database=balta;Trusted_C
 using (var connection = new SqlConnection(connectionString))
 {
     //UpdateCategory(connection);
-    DeleteCategory(connection);
+    //DeleteCategory(connection);
+    CreateManyCategory(connection);
     ListCategories(connection);
 
 }
@@ -74,6 +75,48 @@ static void DeleteCategory(SqlConnection connection)
         category.Id
     });
     Console.WriteLine($"{rows} linhas Deletadas;");
+}
+
+static void CreateManyCategory(SqlConnection connection)
+{
+    Category category = new Category("Azure", "Azure", "Categoria destinada a serviços Azure", 5, "Azure", false);
+    Category category2 = new Category("Categoria nova", "Categoria nova", "Categoria Nova", 3, "Nova", true);
+
+    var insertSql = @"INSERT INTO 
+    [Category] 
+        VALUES(
+            @Id, 
+            @Title, 
+            @Url, 
+            @Summary, 
+            @Order, 
+            @Description, 
+            @Featured)";
+
+    var rows = connection.Execute(insertSql, new[]{
+        new 
+        {   
+            category.Id,
+            category.Title,
+            category.Url,
+            category.Summary,
+            category.Order,
+            category.Description,
+            category.Featured
+            },
+        new
+        {
+            category2.Id,
+            category2.Title,
+            category2.Url,
+            category2.Summary,
+            category2.Order,
+            category2.Description,
+            category2.Featured
+        }
+    });
+
+    Console.WriteLine($"{rows} linhas inseridas;");
 }
 
 
