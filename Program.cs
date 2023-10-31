@@ -16,7 +16,8 @@ using (var connection = new SqlConnection(connectionString))
     //ListCategories(connection);
     //GetCategory(connection, "06d73e6b-315f-4cfc-b462-f643e1a50e97");
     //ExecuteProcedure(connection);
-    ExecuteReadProcedure(connection);
+    //ExecuteReadProcedure(connection);
+    ExecuteScalar(connection);
 
 }
 
@@ -155,10 +156,38 @@ static void ExecuteReadProcedure(SqlConnection connection)
     var sql = "spGetCoursesByCategory";
     var param = new { CategoryId = "AF3407AA-11AE-4621-A2EF-2028B85507C4" };
     var courses = connection.Query(sql, param, commandType: System.Data.CommandType.StoredProcedure);
-    foreach(var item in courses)
+    foreach (var item in courses)
     {
         Console.WriteLine($"{item.Id}, {item.Title}, {item.Summary}, {item.Tag}");
     }
+}
+
+static void ExecuteScalar(SqlConnection connection)
+{
+    Category category = new Category("Amazon AWS", "Amazon", "Categoria destinada a serviços AWS", 8, "AWS Cloud", false);
+
+    var insertSql = @"INSERT INTO 
+    [Category]
+    OUTPUT inserted.[Id]
+        VALUES(
+            NEWID(), 
+            @Title, 
+            @Url, 
+            @Summary, 
+            @Order, 
+            @Description, 
+            @Featured)";
+
+    var id = connection.ExecuteScalar<Guid>(insertSql, new
+    {
+        category.Title,
+        category.Url,
+        category.Summary,
+        category.Order,
+        category.Description,
+        category.Featured
+    });
+    Console.WriteLine($"a categoria inserida foi: {id}");
 }
 
 
