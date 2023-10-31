@@ -14,7 +14,8 @@ using (var connection = new SqlConnection(connectionString))
     //DeleteCategory(connection);
     //CreateManyCategory(connection);
     //ListCategories(connection);
-    GetCategory(connection, "06d73e6b-315f-4cfc-b462-f643e1a50e97");
+    //GetCategory(connection, "06d73e6b-315f-4cfc-b462-f643e1a50e97");
+    ExecuteProcedure(connection);
 
 }
 
@@ -122,12 +123,29 @@ static void CreateManyCategory(SqlConnection connection)
 
 static void GetCategory(SqlConnection connection, string stringId)
 {
-    Category categorySelect = new Category(new Guid(stringId));
-    Category category = connection.QueryFirst<Category>("SELECT [Id], [Title], [Url], [Summary] FROM [Category] WHERE [Id]=@Id", new {categorySelect.Id});
+    try
+    {
+        Category categorySelect = new Category(new Guid(stringId));
+        Category category = connection.QueryFirst<Category>("SELECT [Id], [Title], [Url], [Summary] FROM [Category] WHERE [Id]=@Id", new { categorySelect.Id });
 
 
-    Console.WriteLine($"{category.Id}, {category.Title}, {category.Url}, {category.Summary}");
+        Console.WriteLine($"{category.Id}, {category.Title}, {category.Url}, {category.Summary}");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine("Category not found");
+    }
 
+
+
+}
+
+static void ExecuteProcedure(SqlConnection connection)
+{
+    var sql = "spDeleteStudent";
+    var param = new { StudentId = "6719CA6F-645B-4AA4-B92C-063264F1F6C6" };
+    var rows = connection.Execute(sql, param, commandType: System.Data.CommandType.StoredProcedure);
+    Console.WriteLine($"{rows} Rows Deleted");
 
 }
 
