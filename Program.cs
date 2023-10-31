@@ -2,22 +2,45 @@
 using Dapper;
 using Microsoft.Data.SqlClient;
 
-
-
 const string connectionString = "Server=DESKTOP-BVKU5HC;Database=balta;Trusted_Connection=True;TrustServerCertificate=True";
+
+
+Category category = new Category("Amazon AWS", "Amazon", "Categoria destinada a serviços AWS", 8, "AWS Cloud", false);
+
+var insertSql = @"INSERT INTO 
+    [Category] 
+        VALUES(
+            @Id, 
+            @Title, 
+            @Url, 
+            @Summary, 
+            @Order, 
+            @Description, 
+            @Featured)";
+
+
+
 
 using (var connection = new SqlConnection(connectionString))
 {
-    connection.Open();
-
-    using (var command = new SqlCommand())
+    var rows = connection.Execute(insertSql, new
     {
-        var categories = connection.Query<Category>("SELECT [ID], [Title] FROM [Category]");
-        foreach (var category in categories)
-        {
-            Console.WriteLine(category.Id + ", " + category.Title);
-        }
+        category.Id,
+        category.Title,
+        category.Url,
+        category.Summary,
+        category.Order,
+        category.Description,
+        category.Featured
+    });
+    Console.WriteLine($"{rows} linhas inseridas;");
+
+    var categories = connection.Query<Category>("SELECT [Id], [Title] Title FROM [Category]");
+    foreach (var item in categories)
+    {
+       Console.WriteLine(item.Id + ", " + item.Title);
     }
+    
 }
 
 
