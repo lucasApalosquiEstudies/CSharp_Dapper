@@ -18,7 +18,8 @@ using (var connection = new SqlConnection(connectionString))
     //ExecuteProcedure(connection);
     //ExecuteReadProcedure(connection);
     //ExecuteScalar(connection);
-    ReadView(connection);
+    //ReadView(connection);
+    OndeToOne(connection);
 
 }
 
@@ -196,9 +197,32 @@ static void ReadView(SqlConnection connection)
     var sql = "SELECT * FROM [vwCourses]";
     var courses = connection.Query(sql);
 
-    foreach(var item in courses)
+    foreach (var item in courses)
     {
         Console.WriteLine($"{item.Id}, {item.Title}");
+    }
+}
+
+static void OndeToOne(SqlConnection connection)
+{
+    var sql = @"
+        SELECT
+            *
+        FROM
+            [CareerItem]
+        INNER JOIN
+            [Course] ON [CareerItem].[CourseId] = [Course].[Id]";
+
+    var items = connection.Query<CarrerItem, Course, CarrerItem>(
+        sql, 
+        (carrerItem, course) => {
+            carrerItem.Course = course;
+            return carrerItem;
+        }, splitOn: "Id");
+
+    foreach (var item in items)
+    {
+        Console.WriteLine($"{item.Title} - Curso: {item.Course.Title}");
     }
 }
 
