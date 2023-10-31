@@ -15,7 +15,8 @@ using (var connection = new SqlConnection(connectionString))
     //CreateManyCategory(connection);
     //ListCategories(connection);
     //GetCategory(connection, "06d73e6b-315f-4cfc-b462-f643e1a50e97");
-    ExecuteProcedure(connection);
+    //ExecuteProcedure(connection);
+    ExecuteReadProcedure(connection);
 
 }
 
@@ -147,6 +148,17 @@ static void ExecuteProcedure(SqlConnection connection)
     var rows = connection.Execute(sql, param, commandType: System.Data.CommandType.StoredProcedure);
     Console.WriteLine($"{rows} Rows Deleted");
 
+}
+
+static void ExecuteReadProcedure(SqlConnection connection)
+{
+    var sql = "spGetCoursesByCategory";
+    var param = new { CategoryId = "AF3407AA-11AE-4621-A2EF-2028B85507C4" };
+    var courses = connection.Query(sql, param, commandType: System.Data.CommandType.StoredProcedure);
+    foreach(var item in courses)
+    {
+        Console.WriteLine($"{item.Id}, {item.Title}, {item.Summary}, {item.Tag}");
+    }
 }
 
 
