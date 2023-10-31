@@ -12,8 +12,9 @@ using (var connection = new SqlConnection(connectionString))
 {
     //UpdateCategory(connection);
     //DeleteCategory(connection);
-    CreateManyCategory(connection);
-    ListCategories(connection);
+    //CreateManyCategory(connection);
+    //ListCategories(connection);
+    GetCategory(connection, "06d73e6b-315f-4cfc-b462-f643e1a50e97");
 
 }
 
@@ -94,8 +95,8 @@ static void CreateManyCategory(SqlConnection connection)
             @Featured)";
 
     var rows = connection.Execute(insertSql, new[]{
-        new 
-        {   
+        new
+        {
             category.Id,
             category.Title,
             category.Url,
@@ -117,6 +118,17 @@ static void CreateManyCategory(SqlConnection connection)
     });
 
     Console.WriteLine($"{rows} linhas inseridas;");
+}
+
+static void GetCategory(SqlConnection connection, string stringId)
+{
+    Category categorySelect = new Category(new Guid(stringId));
+    Category category = connection.QueryFirst<Category>("SELECT [Id], [Title], [Url], [Summary] FROM [Category] WHERE [Id]=@Id", new {categorySelect.Id});
+
+
+    Console.WriteLine($"{category.Id}, {category.Title}, {category.Url}, {category.Summary}");
+
+
 }
 
 

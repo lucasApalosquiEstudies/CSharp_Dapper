@@ -35,7 +35,15 @@ namespace BaltaDataAccess.Models
 
         public Category(Guid id)
         {
-            Id= id;
+            Id = id;
+        }
+
+        public Category(Guid id, string title, string url, string summary)
+        {
+            Id = id;
+            Title = title;
+            Url = url;
+            Summary= summary;
         }
 
 
