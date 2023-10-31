@@ -10,6 +10,7 @@ const string connectionString = "Server=DESKTOP-BVKU5HC;Database=balta;Trusted_C
 
 using (var connection = new SqlConnection(connectionString))
 {
+    UpdateCategory(connection);
     ListCategories(connection);
 
 }
@@ -49,6 +50,18 @@ static void CreateCategory(SqlConnection connection)
         category.Featured
     });
     Console.WriteLine($"{rows} linhas inseridas;");
+}
+
+static void UpdateCategory(SqlConnection connection)
+{
+    Category category = new Category(new Guid("af3407aa-11ae-4621-a2ef-2028b85507c4"), "FrontEnd 2021");
+    var UpdateQuery = "UPDATE [Category] SET [Title]=@Title WHERE [Id]=@Id";
+    var rows = connection.Execute(UpdateQuery, new
+    {
+        category.Id,
+        category.Title
+    });
+    Console.WriteLine($"{rows} linhas Atualizadas;");
 }
 
 
