@@ -33,6 +33,12 @@ namespace BaltaDataAccess.Models
             Title = title;
         }
 
+        public Category(Guid id)
+        {
+            Id= id;
+        }
+
+
 
 
 

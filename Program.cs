@@ -10,7 +10,8 @@ const string connectionString = "Server=DESKTOP-BVKU5HC;Database=balta;Trusted_C
 
 using (var connection = new SqlConnection(connectionString))
 {
-    UpdateCategory(connection);
+    //UpdateCategory(connection);
+    DeleteCategory(connection);
     ListCategories(connection);
 
 }
@@ -62,6 +63,17 @@ static void UpdateCategory(SqlConnection connection)
         category.Title
     });
     Console.WriteLine($"{rows} linhas Atualizadas;");
+}
+
+static void DeleteCategory(SqlConnection connection)
+{
+    Category category = new Category(new Guid("25d510c8-3108-44c2-86c5-924d9832aa8c"));
+    var DeleteQuery = "DELETE [Category] WHERE [Id]=@Id";
+    var rows = connection.Execute(DeleteQuery, new
+    {
+        category.Id
+    });
+    Console.WriteLine($"{rows} linhas Deletadas;");
 }
 
 
