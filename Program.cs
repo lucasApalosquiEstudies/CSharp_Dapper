@@ -21,7 +21,8 @@ using (var connection = new SqlConnection(connectionString))
     //ReadView(connection);
     //OneToOne(connection);
     //OneToMany(connection);  
-    QueryMultiple(connection);
+    //QueryMultiple(connection);
+    SelectIn(connection);
 }
 
 static void ListCategories(SqlConnection connection)
@@ -274,7 +275,7 @@ static void OneToMany(SqlConnection connection)
 
 static void QueryMultiple(SqlConnection connection)
 {
-    var query = "SELECT * FROM [Category]; SELECT * FROM [Course]";
+    var query = "SELECT * FROM [Category]; SELECT * FROM [Course];";
     using (var multi = connection.QueryMultiple(query))
     {
         var categories = multi.Read<Category>();
@@ -288,6 +289,30 @@ static void QueryMultiple(SqlConnection connection)
         {
             Console.WriteLine($"Course Title: {item.Title}");
         }
+
     }
 }
+
+static void SelectIn(SqlConnection connection)
+{
+    var query = @"SELECT * FROM [Career] 
+                WHERE [Id] IN @Id";
+
+    var items = connection.Query<Carrer>(query, new
+    {
+        Id = new[]
+        {
+            "E6730D1C-6870-4DF3-AE68-438624E04C72",
+            "4327AC7E-963B-4893-9F31-9A3B28A4E72B"
+        }
+    });
+
+    foreach (var item in items)
+    {
+        Console.WriteLine(item.Title);
+    }
+
+
+}
+
 
