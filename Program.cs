@@ -23,7 +23,8 @@ using (var connection = new SqlConnection(connectionString))
     //OneToMany(connection);  
     //QueryMultiple(connection);
     //SelectIn(connection);
-    Like(connection, "backend");
+    //Like(connection, "backend");
+    Transaction(connection);
 }
 
 static void ListCategories(SqlConnection connection)
@@ -328,6 +329,41 @@ static void Like(SqlConnection connection, string term)
     {
         Console.WriteLine(item.Title);
     }
+}
+
+static void Transaction(SqlConnection connection)
+{
+    Category category = new Category("LInux", "Linux", "Categoria destinada a serviços Linux", 9, "Linux", false);
+
+    var insertSql = @"INSERT INTO 
+    [Category] 
+        VALUES(
+            @Id, 
+            @Title, 
+            @Url, 
+            @Summary, 
+            @Order, 
+            @Description, 
+            @Featured)";
+    connection.Open();
+    using (var transaction = connection.BeginTransaction())
+    {
+        var rows = connection.Execute(insertSql, new
+        {
+            category.Id,
+            category.Title,
+            category.Url,
+            category.Summary,
+            category.Order,
+            category.Description,
+            category.Featured
+        }, transaction);
+
+        transaction.Commit();
+        //transaction.Rollback();
+        Console.WriteLine($"{rows} Linhas Adicionadas");
+    }
+    connection.Close();
 }
 
 
