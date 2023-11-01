@@ -27,6 +27,17 @@ namespace BaltaDataAccess.Models
             Featured = featured;
         }
 
+        public Category(Guid id, string title, string url, string summary, int order, string description, bool featured)
+        {
+            Id = id;
+            Title = title;
+            Url = url;
+            Summary = summary;
+            Order = order;
+            Description = description;
+            Featured = featured;
+        }
+
         public Category(Guid id, string title)
         {
             Id = id;
