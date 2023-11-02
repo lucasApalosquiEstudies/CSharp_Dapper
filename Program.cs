@@ -5,7 +5,8 @@ using Microsoft.Data.SqlClient;
 
 const string CONNECTION_STRING = "Server=DESKTOP-BVKU5HC;Database=Blog;Trusted_Connection=True;TrustServerCertificate=True";
 
-ReadUsers();
+//ReadUsers();
+ReadUser();
 
 static void ReadUsers()
 {
@@ -16,5 +17,15 @@ static void ReadUsers()
         {
             Console.WriteLine(user.Name);
         }
+    }
+}
+
+static void ReadUser()
+{
+    using (var connection = new SqlConnection(CONNECTION_STRING))
+    {
+        var user = connection.Get<User>(1);
+        Console.WriteLine($"{user.Name}");
+
     }
 }
