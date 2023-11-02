@@ -11,13 +11,11 @@ namespace Blog.Repositories
 {
     public class UserRepository
     {
+        private SqlConnection _connection = new SqlConnection("Server=DESKTOP-BVKU5HC;Database=Blog;Trusted_Connection=True;TrustServerCertificate=True");
+
         public IEnumerable<User> GetAll()
-        {
-            using (var connection = new SqlConnection(""))
-            {
-                return connection.GetAll<User>();
-                
-            }
-        }
+            => _connection.GetAll<User>();
+
+
     }
 }
