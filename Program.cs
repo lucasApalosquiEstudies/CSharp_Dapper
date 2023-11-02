@@ -9,6 +9,7 @@ const string CONNECTION_STRING = "Server=DESKTOP-BVKU5HC;Database=Blog;Trusted_C
 //ReadUser();
 //CreateUser();
 //UpdateUser();
+DeleteUser(2);
 
 static void ReadUsers()
 {
@@ -64,5 +65,17 @@ static void UpdateUser()
     {
         connection.Update(user);
         Console.WriteLine("Cadastro Alterado com Sucesso!");
+    }
+}
+
+static void DeleteUser(int id)
+{
+    var user = new User();
+    user.Id = id;
+
+    using (var connection = new SqlConnection(CONNECTION_STRING))
+    {
+        connection.Delete(user);
+        Console.WriteLine("Cadastro Excluido com Sucesso!");
     }
 }
