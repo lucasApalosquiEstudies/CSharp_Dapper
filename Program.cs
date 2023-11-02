@@ -5,9 +5,10 @@ using Microsoft.Data.SqlClient;
 
 const string CONNECTION_STRING = "Server=DESKTOP-BVKU5HC;Database=Blog;Trusted_Connection=True;TrustServerCertificate=True";
 
-ReadUsers();
+//ReadUsers();
 //ReadUser();
 //CreateUser();
+//UpdateUser();
 
 static void ReadUsers()
 {
@@ -45,5 +46,23 @@ static void CreateUser()
     {
         connection.Insert(user);
         Console.WriteLine("Cadastro Realizado com Sucesso!");
+    }
+}
+
+static void UpdateUser()
+{
+    var user = new User();
+    user.Id = 2;
+    user.Name = "Rodrigo Faro Almeida";
+    user.Email = "rodrigo.faro@email.com";
+    user.Passwordhash = "HASH";
+    user.Bio = "Apenas um apresentador";
+    user.Image = "Http://";
+    user.Slug = "rodrigo-faro";
+
+    using (var connection = new SqlConnection(CONNECTION_STRING))
+    {
+        connection.Update(user);
+        Console.WriteLine("Cadastro Alterado com Sucesso!");
     }
 }
