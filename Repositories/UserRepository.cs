@@ -24,7 +24,26 @@ namespace Blog.Repositories
             => _connection.Get<User>(id);
 
         public void Create(User user)
-            => _connection.Insert(user);
+        {
+            user.Id = 0;
+            _connection.Insert(user);
+        }
+
+        public void Update(User user)
+        {
+            if (user.Id != 0)
+            {
+                _connection.Update(user);
+            }
+        }
+
+        public void Delete(int id)
+        {
+            User user = GetById(id);
+            _connection.Delete(user);
+        }
+
+
 
     }
 }
