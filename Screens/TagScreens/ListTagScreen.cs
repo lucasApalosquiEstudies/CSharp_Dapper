@@ -15,6 +15,8 @@ namespace Blog.Screens.TagScreens
             Console.Clear();
             Console.WriteLine("Listagem de Tags");
             List();
+            Console.ReadKey();
+            MenuTagScreen.Load();
         }
 
         private static void List()
